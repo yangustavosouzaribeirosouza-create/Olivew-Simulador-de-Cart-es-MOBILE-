@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprenda HTML — Curso Interativo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e29;
+    --surface: #1e2330;
+    --surface2: #252b3a;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text2: #8a8fa8;
+    --text3: #555a70;
+    --accent: #4f8cff;
+    --accent2: #7eb8ff;
+    --green: #3ecf8e;
+    --green2: #1a8055;
+    --amber: #f5a623;
+    --red: #e25c5c;
+    --mono: 'DM Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'Lora', serif;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Scrollbar ─────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+  /* ── Layout ─────────────────────────────── */
+  .wrapper { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar ─────────────────────────────── */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar-logo {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .logo-title {
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .progress-section {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--surface);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-text {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .nav-list {
+    list-style: none;
+    padding: 12px 0;
+    flex: 1;
+  }
+
+  .nav-item {
+    padding: 0;
+  }
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 24px;
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    position: relative;
+  }
+
+  .nav-btn:hover { color: var(--text); background: var(--surface); }
+
+  .nav-btn.active {
+    color: var(--accent2);
+    background: rgba(79,140,255,0.08);
+  }
+
+  .nav-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+
+  .nav-btn.done .nav-num { background: var(--green2); color: var(--green); }
+
+  .nav-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .nav-btn.active .nav-num {
+    background: rgba(79,140,255,0.2);
+    color: var(--accent2);
+  }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+
+  /* ── Main ─────────────────────────────── */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+  }
+
+  /* ── Hero ─────────────────────────────── */
+  .hero {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 60px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(79,140,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    color: var(--accent2);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 520px;
+    margin-bottom: 32px;
+  }
+
+  .hero-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+
+  .chip-dot.blue { background: var(--accent); }
+  .chip-dot.green { background: var(--green); }
+  .chip-dot.amber { background: var(--amber); }
+
+  /* ── Lesson area ─────────────────────── */
+  .lesson-area {
+    padding: 50px 60px;
+    max-width: 820px;
+  }
+
+  .lesson { display: none; }
+  .lesson.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .lesson-header {
+    margin-bottom: 32px;
+  }
+
+  .lesson-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .lesson-title {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .lesson-desc {
+    font-size: 15px;
+    color: var(--text2);
+    line-height: 1.75;
+    max-width: 600px;
+  }
+
+  /* ── Concepts ─────────────────────────── */
+  .concepts { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+
+  .concept {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    transition: border-color 0.2s;
+  }
+
+  .concept:hover { border-left-color: var(--green); }
+
+  .concept h3 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+
+  .concept p {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ── Playground ─────────────────────────── */
+  .playground {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 36px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .playground-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pg-dots { display: flex; gap: 6px; }
+  .pg-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .pg-dot:nth-child(1) { background: #e25c5c; }
+  .pg-dot:nth-child(2) { background: var(--amber); }
+  .pg-dot:nth-child(3) { background: var(--green); }
+
+  .pg-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.08em;
+  }
+
+  .run-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .run-btn:hover { background: var(--accent2); transform: scale(1.03); }
+
+  .pg-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pg-editor {
+    border-right: 1px solid var(--border);
+  }
+
+  .pg-editor-label, .pg-preview-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .code-area {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px;
+    background: var(--bg);
+    color: #a8e6c1;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    border: none;
+    outline: none;
+    resize: vertical;
+    tab-size: 2;
+  }
+
+  .preview-box {
+    background: #fff;
+    padding: 16px;
+    min-height: 160px;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: #222;
+    line-height: 1.6;
+  }
+
+  /* ── Tag Reference ─────────────────────── */
+  .tag-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+
+  .tag-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tag-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(79,140,255,0.15);
+  }
+
+  .tag-card code {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--green);
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .tag-card span {
+    font-size: 12px;
+    color: var(--text2);
+    font-family: var(--display);
+  }
+
+  /* ── Quiz ─────────────────────────────── */
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 36px;
+  }
+
+  .quiz-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .quiz h3 {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 18px;
+    line-height: 1.4;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+
+  .quiz-opt {
+    padding: 12px 16px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    background: var(--bg2);
+    color: var(--text2);
+    font-family: var(--display);
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .quiz-opt::before {
+    content: attr(data-letter);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .quiz-opt:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(79,140,255,0.06);
+  }
+
+  .quiz-opt:hover:not(:disabled)::before {
+    background: rgba(79,140,255,0.2);
+    color: var(--accent2);
+  }
+
+  .quiz-opt.correct { border-color: var(--green); background: rgba(62,207,142,0.08); color: var(--green); }
+  .quiz-opt.correct::before { background: rgba(62,207,142,0.2); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(226,92,92,0.08); color: var(--red); }
+  .quiz-opt.wrong::before { background: rgba(226,92,92,0.2); color: var(--red); }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: var(--display);
+    display: none;
+    line-height: 1.5;
+  }
+
+  .feedback.show { display: flex; align-items: flex-start; gap: 10px; }
+  .feedback.ok { background: rgba(62,207,142,0.1); color: var(--green); border: 1px solid rgba(62,207,142,0.2); }
+  .feedback.err { background: rgba(226,92,92,0.1); color: var(--red); border: 1px solid rgba(226,92,92,0.2); }
+
+  /* ── Footer nav ─────────────────────────── */
+  .footer-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+
+  .fn-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .fn-btn:hover { background: var(--surface2); color: var(--text); }
+
+  .fn-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .fn-btn.primary:hover { background: #6fa3ff; transform: translateY(-1px); }
+
+  /* ── Mobile toggle ─────────────────────── */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 200;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    align-items: center; justify-content: center;
+  }
+
+  /* ── Responsive ─────────────────────────── */
+  @media (max-width: 900px) {
+    .wrapper { grid-template-columns: 1fr; }
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .hero { padding: 60px 24px 36px; }
+    .lesson-area { padding: 32px 24px; }
+    .pg-body { grid-template-columns: 1fr; }
+    .pg-editor { border-right: none; border-bottom: 1px solid var(--border); }
+    .menu-toggle { display: flex; }
+    .footer-nav { gap: 12px; }
+    .fn-btn { padding: 10px 14px; font-size: 13px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-title { font-size: 26px; }
+    .lesson-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuToggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
+
+<div class="wrapper">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-tag">&lt;/&gt; curso</div>
+      <div class="logo-title">Aprenda HTML</div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-label">seu progresso</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">0 de 6 lições</div>
+    </div>
+
+    <ul class="nav-list" id="navList"></ul>
+
+    <div class="sidebar-footer">
+      <p>Edite o código nos playgrounds e clique ▶ Executar para ver o resultado em tempo real.</p>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-eyebrow">&#60;html&#62; do zero ao básico</div>
+      <h1 class="hero-title">A linguagem que<br><span>constrói a web</span></h1>
+      <p class="hero-sub">6 lições interativas com exemplos ao vivo, quizzes e um playground de código para você experimentar na hora.</p>
+      <div class="hero-chips">
+        <span class="chip"><span class="chip-dot blue"></span>6 lições</span>
+        <span class="chip"><span class="chip-dot green"></span>Playground ao vivo</span>
+        <span class="chip"><span class="chip-dot amber"></span>Quizzes interativos</span>
+      </div>
+    </section>
+
+    <!-- Lessons -->
+    <section class="lesson-area" id="lessonArea"></section>
+
+  </main>
+</div>
+
+<script>
+const lessons = [
+  {
+    id: 0,
+    title: "O que é HTML?",
+    desc: "HTML (HyperText Markup Language) é a linguagem usada para criar páginas web. Ela usa marcadores chamados <strong style='color:#a8e6c1;font-style:normal'>tags</strong> para estruturar o conteúdo — textos, imagens, links e muito mais.",
+    concepts: [
+      { title: "<html> = estrutura da página", body: "Pense no HTML como o esqueleto de uma casa: ele define onde ficam as paredes, portas e janelas. O visual (CSS) e o comportamento (JavaScript) vêm depois." },
+      { title: "Tags = marcadores", body: "Uma tag é escrita entre &lt; e &gt;. Quase todas as tags têm abertura e fechamento. Ex: &lt;p&gt; abre um parágrafo e &lt;/p&gt; fecha." },
+      { title: "Navegador interpreta o HTML", body: "Quando você acessa um site, o navegador lê o HTML e mostra o resultado formatado. Você nunca vê as tags no resultado final." }
+    ],
+    code: `<h1>Olá, mundo!</h1>\n<p>Minha primeira página HTML.</p>`,
+    quiz: { q: "O que significa HTML?", opts: ["HyperText Markup Language","High Tech Modern Layout","Hyper Transfer Markup Link","Home Text Making Language"], correct: 0, explain: "HTML = HyperText Markup Language — linguagem de marcação de hipertexto." }
+  },
+  {
+    id: 1,
+    title: "Estrutura básica",
+    desc: "Todo arquivo HTML segue uma estrutura padrão. Ela garante que o navegador saiba como ler e exibir o conteúdo corretamente.",
+    concepts: [
+      { title: "&lt;!DOCTYPE html&gt;", body: "Informa ao navegador que este arquivo usa HTML5, a versão moderna." },
+      { title: "&lt;html&gt;", body: "Elemento raiz: tudo dentro dele é HTML. Agrupa &lt;head&gt; e &lt;body&gt;." },
+      { title: "&lt;head&gt; e &lt;body&gt;", body: "&lt;head&gt; contém informações da página (título, metadados). &lt;body&gt; contém o conteúdo visível ao usuário." }
+    ],
+    code: `<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meu Site</title>\n  </head>\n  <body>\n    <h1>Bem-vindo!</h1>\n    <p>Este é o corpo da página.</p>\n  </body>\n</html>`,
+    quiz: { q: "Onde fica o conteúdo visível da página?", opts: ["Dentro de &lt;head&gt;","Dentro de &lt;body&gt;","Dentro de &lt;title&gt;","Dentro de &lt;!DOCTYPE&gt;"], correct: 1, explain: "O &lt;body&gt; contém tudo que aparece para o usuário na tela." }
+  },
+  {
+    id: 2,
+    title: "Textos e títulos",
+    desc: "HTML tem tags específicas para diferentes níveis de texto. Os títulos vão de h1 (mais importante) a h6 (menos importante), e &lt;p&gt; serve para parágrafos.",
+    concepts: [
+      { title: "Títulos: &lt;h1&gt; até &lt;h6&gt;", body: "h1 é o título principal da página. Use h2 para seções, h3 para subseções, e assim por diante. Nunca pule níveis." },
+      { title: "Parágrafo: &lt;p&gt;", body: "O elemento &lt;p&gt; cria um bloco de texto separado. O navegador adiciona espaçamento automático entre parágrafos." },
+      { title: "Negrito e itálico", body: "&lt;strong&gt; deixa o texto em negrito (importância). &lt;em&gt; deixa em itálico (ênfase)." }
+    ],
+    code: `<h1>Título principal</h1>\n<h2>Seção importante</h2>\n<p>Um parágrafo com texto <strong>negrito</strong> e <em>itálico</em>.</p>\n<p>Segundo parágrafo aqui.</p>`,
+    quiz: { q: "Qual tag cria o título mais importante da página?", opts: ["&lt;h6&gt;","&lt;title&gt;","&lt;h1&gt;","&lt;p&gt;"], correct: 2, explain: "&lt;h1&gt; é o título de maior destaque. Geralmente aparece apenas uma vez por página." }
+  },
+  {
+    id: 3,
+    title: "Links e imagens",
+    desc: "Links conectam páginas entre si — são a essência do hipertexto. Imagens enriquecem o conteúdo visualmente. Ambos usam atributos para funcionar.",
+    concepts: [
+      { title: "Link: &lt;a href='...'&gt;", body: "O atributo href define o destino do link. Use target='_blank' para abrir em nova aba." },
+      { title: "Imagem: &lt;img src='...'&gt;", body: "&lt;img&gt; não precisa de tag de fechamento. src aponta para o arquivo da imagem. alt descreve a imagem (acessibilidade)." },
+      { title: "Atributos", body: "Atributos adicionam informações extras às tags. São escritos dentro da tag de abertura no formato nome='valor'." }
+    ],
+    code: `<a href="https://google.com" target="_blank">Abrir o Google</a>\n\n<br><br>\n\n<img src="https://placecats.com/200/120" alt="Um gatinho fofo" style="border-radius:8px">`,
+    quiz: { q: "Qual atributo define o endereço de um link?", opts: ["src","href","alt","target"], correct: 1, explain: "href (hypertext reference) define o destino do link." }
+  },
+  {
+    id: 4,
+    title: "Listas",
+    desc: "HTML tem dois tipos principais de listas: listas não ordenadas (com marcadores) e listas ordenadas (com números). Ambas usam &lt;li&gt; para cada item.",
+    concepts: [
+      { title: "&lt;ul&gt; — lista com marcadores", body: "ul = unordered list. Use quando a ordem dos itens não importa, como ingredientes de uma receita." },
+      { title: "&lt;ol&gt; — lista numerada", body: "ol = ordered list. Use quando a ordem importa, como passos de um tutorial." },
+      { title: "&lt;li&gt; — item de lista", body: "Cada item dentro de &lt;ul&gt; ou &lt;ol&gt; é marcado com &lt;li&gt; (list item)." }
+    ],
+    code: `<h3>Frutas favoritas:</h3>\n<ul>\n  <li>Manga</li>\n  <li>Abacaxi</li>\n  <li>Morango</li>\n</ul>\n\n<h3>Como fazer café:</h3>\n<ol>\n  <li>Aqueça a água</li>\n  <li>Coloque o pó</li>\n  <li>Sirva</li>\n</ol>`,
+    quiz: { q: "Qual tag cria uma lista numerada?", opts: ["&lt;ul&gt;","&lt;list&gt;","&lt;ol&gt;","&lt;nl&gt;"], correct: 2, explain: "ol = ordered list — lista ordenada, com numeração automática." }
+  },
+  {
+    id: 5,
+    title: "Tags essenciais",
+    desc: "Guia rápido das tags HTML mais comuns. Clique em qualquer tag para carregar um exemplo no playground abaixo.",
+    concepts: [],
+    tagRef: true,
+    code: `<div style="padding:16px; background:#f0f4ff; border-radius:8px">\n  <h2>Meu cartão</h2>\n  <p>Texto dentro de uma <span style="color:purple">div</span>.</p>\n  <br>\n  <hr>\n  <p>Após a linha divisória.</p>\n</div>`,
+    quiz: { q: "Qual tag agrupa elementos sem significado semântico?", opts: ["&lt;section&gt;","&lt;div&gt;","&lt;article&gt;","&lt;p&gt;"], correct: 1, explain: "&lt;div&gt; é um contêiner genérico — muito usado para agrupar e organizar elementos." }
+  }
+];
+
+const tags = [
+  { tag: "div", desc: "Contêiner genérico (bloco)", ex: `<div style="background:#e8f4ff;padding:12px;border-radius:6px">\n  <p>Conteúdo dentro da div</p>\n</div>` },
+  { tag: "span", desc: "Destaque inline", ex: `<p>Texto <span style="color:green;font-weight:bold">verde e negrito</span> aqui.</p>` },
+  { tag: "br", desc: "Quebra de linha", ex: `<p>Linha um<br>Linha dois<br>Linha três</p>` },
+  { tag: "hr", desc: "Linha divisória", ex: `<p>Texto acima</p>\n<hr>\n<p>Texto abaixo</p>` },
+  { tag: "button", desc: "Botão clicável", ex: `<button onclick="alert('Olá!')">Clique aqui</button>` },
+  { tag: "input", desc: "Campo de entrada", ex: `<input type="text" placeholder="Digite algo...">\n<br><br>\n<input type="checkbox"> Aceitar termos` },
+  { tag: "table", desc: "Tabela de dados", ex: `<table border="1" cellpadding="6">\n  <tr><th>Nome</th><th>Nota</th></tr>\n  <tr><td>Ana</td><td>9.5</td></tr>\n  <tr><td>João</td><td>8.0</td></tr>\n</table>` },
+  { tag: "form", desc: "Formulário", ex: `<form>\n  <label>Email:<br>\n    <input type="email" placeholder="seu@email.com">\n  </label><br><br>\n  <button type="submit">Enviar</button>\n</form>` },
+  { tag: "section", desc: "Seção temática", ex: `<section style="padding:12px;border:1px solid #ccc;border-radius:6px">\n  <h2>Sobre mim</h2>\n  <p>Uma seção semântica da página.</p>\n</section>` },
+  { tag: "header", desc: "Cabeçalho", ex: `<header style="background:#333;color:white;padding:16px">\n  <h1>Meu Site</h1>\n  <nav>Home | Sobre | Contato</nav>\n</header>` },
+  { tag: "footer", desc: "Rodapé", ex: `<footer style="background:#f5f5f5;padding:16px;text-align:center">\n  <p>&copy; 2025 Meu Site</p>\n</footer>` },
+  { tag: "nav", desc: "Navegação", ex: `<nav>\n  <a href="#">Home</a> |\n  <a href="#">Blog</a> |\n  <a href="#">Contato</a>\n</nav>` }
+];
+
+let current = 0;
+const done = new Set();
+
+const letters = ['A','B','C','D'];
+
+function buildNav() {
+  const list = document.getElementById('navList');
+  list.innerHTML = lessons.map(l =>
+    `<li class="nav-item">
+      <button class="nav-btn${l.id===0?' active':''}" id="navBtn${l.id}" onclick="goTo(${l.id})">
+        <span class="nav-num" id="navNum${l.id}">${l.id+1}</span>
+        ${l.title}
+      </button>
+    </li>`
+  ).join('');
+}
+
+function buildLessons() {
+  const area = document.getElementById('lessonArea');
+  area.innerHTML = lessons.map(l => {
+    const concepts = l.concepts.map(c =>
+      `<div class="concept"><h3>${c.title}</h3><p>${c.body}</p></div>`
+    ).join('');
+
+    const tagGrid = l.tagRef ? `
+      <div class="tag-grid">
+        ${tags.map(t => `<div class="tag-card" onclick="loadTag('${t.tag}',${l.id})">
+          <code>&lt;${t.tag}&gt;</code>
+          <span>${t.desc}</span>
+        </div>`).join('')}
+      </div>` : '';
+
+    const quiz = `
+      <div class="quiz">
+        <div class="quiz-eyebrow">✦ teste de conhecimento</div>
+        <h3>${l.quiz.q}</h3>
+        <div class="quiz-options">
+          ${l.quiz.opts.map((o,i) =>
+            `<button class="quiz-opt" data-letter="${letters[i]}" onclick="answer(${i},${l.quiz.correct},${l.id},'${l.quiz.explain.replace(/'/g,"\\'")}',this)">${o}</button>`
+          ).join('')}
+        </div>
+        <div class="feedback" id="fb${l.id}"></div>
+      </div>`;
+
+    return `
+      <div class="lesson${l.id===0?' active':''}" id="lesson${l.id}">
+        <div class="lesson-header">
+          <div class="lesson-num">lição ${l.id+1} de ${lessons.length}</div>
+          <h2 class="lesson-title">${l.title}</h2>
+          <p class="lesson-desc">${l.desc}</p>
+        </div>
+        ${l.concepts.length ? `<div class="concepts">${concepts}</div>` : ''}
+        ${tagGrid}
+        <div class="playground">
+          <div class="playground-header">
+            <div class="pg-dots"><div class="pg-dot"></div><div class="pg-dot"></div><div class="pg-dot"></div></div>
+            <span class="pg-label">playground.html</span>
+            <button class="run-btn" onclick="runCode(${l.id})">▶ Executar</button>
+          </div>
+          <div class="pg-body">
+            <div class="pg-editor">
+              <div class="pg-editor-label">código HTML</div>
+              <textarea class="code-area" id="code${l.id}" spellcheck="false">${l.code}</textarea>
+            </div>
+            <div>
+              <div class="pg-preview-label">resultado</div>
+              <div class="preview-box" id="preview${l.id}"></div>
+            </div>
+          </div>
+        </div>
+        ${quiz}
+        <div class="footer-nav">
+          ${l.id > 0
+            ? `<button class="fn-btn" onclick="goTo(${l.id-1})">← Anterior</button>`
+            : '<span></span>'}
+          ${l.id < lessons.length-1
+            ? `<button class="fn-btn primary" onclick="goTo(${l.id+1})">Próxima lição →</button>`
+            : `<button class="fn-btn primary" onclick="alert('Parabéns! Você completou todas as lições! Agora explore CSS para dar estilo à sua página.')">🎉 Concluir curso</button>`}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function updateProgress() {
+  const pct = Math.round((done.size / lessons.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done.size} de ${lessons.length} lições`;
+}
+
+function goTo(i) {
+  done.add(current);
+  document.getElementById('lesson'+current).classList.remove('active');
+  document.getElementById('navBtn'+current).classList.remove('active');
+  document.getElementById('navNum'+current).style.background = '#1a8055';
+  document.getElementById('navNum'+current).style.color = '#3ecf8e';
+
+  current = i;
+  document.getElementById('lesson'+i).classList.add('active');
+  document.getElementById('navBtn'+i).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Close sidebar on mobile
+  if (window.innerWidth <= 900) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  setTimeout(() => runCode(i), 50);
+}
+
+function runCode(id) {
+  const code = document.getElementById('code'+id).value;
+  document.getElementById('preview'+id).innerHTML = code;
+}
+
+function loadTag(tag, lessonId) {
+  const t = tags.find(x => x.tag === tag);
+  if (t) {
+    document.getElementById('code'+lessonId).value = t.ex;
+    runCode(lessonId);
+  }
+}
+
+function answer(idx, correct, lessonId, explain, btn) {
+  const fb = document.getElementById('fb'+lessonId);
+  const opts = btn.closest('.quiz-options').querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+
+  if (idx === correct) {
+    btn.classList.add('correct');
+    fb.innerHTML = '✓ ' + explain;
+    fb.className = 'feedback show ok';
+    done.add(lessonId);
+    updateProgress();
+    document.getElementById('navNum'+lessonId).style.background = '#1a8055';
+    document.getElementById('navNum'+lessonId).style.color = '#3ecf8e';
+  } else {
+    btn.classList.add('wrong');
+    opts[correct].classList.add('correct');
+    fb.innerHTML = '✗ Quase lá! ' + explain;
+    fb.className = 'feedback show err';
+  }
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Init
+buildNav();
+buildLessons();
+updateProgress();
+setTimeout(() => runCode(0), 100);
+</script>
+
+</body>
+</html>
